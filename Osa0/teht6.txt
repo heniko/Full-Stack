@@ -1,0 +1,6 @@
+note over selain
+Uusi muistiinpano lisätään muistiinpanojen listalle
+muistiinpanojen lista piirretään uudestaan
+end note
+selain->palvelin: POST https://fullstack-exampleapp.herokuapp.com/new_note_spa
+palvelin->selain: 201 Created
