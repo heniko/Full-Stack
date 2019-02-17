@@ -6,12 +6,10 @@ const bodyParser = require('body-parser')
 const cors = require('cors')
 const mongoose = require('mongoose')
 
-const mongoUrl = config.MONGODB_URI
-mongoose.connect(mongoUrl, { useNewUrlParser: true })
+mongoose.connect(config.MONGODB_URI, { useNewUrlParser: true })
 
 app.use(cors())
 app.use(bodyParser.json())
-
 app.use('/api/blogs', blogsRouter)
 
 module.exports = app
