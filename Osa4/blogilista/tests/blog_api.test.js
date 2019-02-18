@@ -28,6 +28,12 @@ describe('when there is initially some blogs saved', () => {
             const res = await api.get('/api/blogs')
             expect(res.body.length).toBe(testHelper.initialBlogs.length)
         })
+
+        test('_id is renamed to id', async()=>{
+            const res = await api.get('/api/blogs')
+            expect(res.body[0].id).toBeDefined()
+            expect(res.body[0]._id).not.toBeDefined()
+        })
     })
 
     describe('POST /api/blogs', () => {
