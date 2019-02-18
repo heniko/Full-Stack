@@ -10,7 +10,7 @@ usersRouter.post('/', async (req, res, next) => {
         const user = new User({
             username: body.username,
             name: body.name,
-            hash
+            passwordHash: hash
         })
         const savedUser = await user.save()
         res.json(savedUser)
