@@ -53,7 +53,7 @@ describe('when there is initially some blogs saved', () => {
         test('existing blog can be deleted', async () => {
             const blogsBeforeDeleting = await testHelper.blogsInDB()
             await api
-                .delete(`/api/blogs/${blogsBeforeDeleting[0]._id}`)
+                .delete(`/api/blogs/${blogsBeforeDeleting[0].id}`)
                 .expect(204)
 
             const blogsAfterDeletingOne = await testHelper.blogsInDB()
