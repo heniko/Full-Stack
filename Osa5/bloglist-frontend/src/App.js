@@ -3,6 +3,8 @@ import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import Notification from './components/Notification'
+import LoginForm from './components/LoginForm'
+import Togglable from './components/Togglable'
 
 
 const App = () => {
@@ -84,29 +86,19 @@ const App = () => {
     <Blog key={b.id} blog={b} />
   )
 
-  const loginForm = () => (
-    <form onSubmit={handleLogin}>
-      <div>
-        käyttäjätunnus
-        <input
-          type="text"
-          value={username}
-          name="Username"
-          onChange={({ target }) => setUsername(target.value)}
+  const loginForm = () => {
+    return (
+      <Togglable buttonLabel='login'>
+        <LoginForm
+          username={username}
+          password={password}
+          handleSubmit={handleLogin}
+          handleUsernameChange={setUsername}
+          handlePasswordChange={setPassword}
         />
-      </div>
-      <div>
-        salasana
-        <input
-          type="password"
-          value={password}
-          name="Password"
-          onChange={({ target }) => setPassword(target.value)}
-        />
-      </div>
-      <button type="submit">kirjaudu</button>
-    </form>
-  )
+      </Togglable>
+    )
+  }
 
   const newBlogForm = () => (
     <form onSubmit={newBlog}>
@@ -143,16 +135,14 @@ const App = () => {
 
   return (
     <div>
+      <Notification notification={notification} />
       {user === null ?
         <div>
-          <h2>log in to application</h2>
-          <Notification notification={notification} />
           {loginForm()}
         </div>
         :
         <div>
           <h2>Blogs</h2>
-          <Notification notification={notification} />
           <p>{user.name} logged in</p>
           <button onClick={handleLogout}>logout</button>
           {newBlogForm()}
