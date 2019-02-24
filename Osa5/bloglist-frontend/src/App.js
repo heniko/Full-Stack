@@ -8,7 +8,7 @@ import Togglable from './components/Togglable'
 
 
 const App = () => {
-  const [blogs, setBlogs] = useState([])
+  const [blogs, setAsSortedBlogs] = useState([])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
@@ -38,6 +38,13 @@ const App = () => {
   const notify = (message, type) => {
     setNotification({ message, type })
     setTimeout(() => setNotification({ message: null }), 5000)
+  }
+
+  const setBlogs = (unsorted) => {
+    const sorted = unsorted.sort((a,b)=>{
+      return b.likes-a.likes
+    })
+    setAsSortedBlogs(sorted)
   }
 
   const handleLogin = async (event) => {
@@ -73,7 +80,6 @@ const App = () => {
       author: author,
       url: url
     }
-
     const returnedBlog = await blogService.create(blogObj)
     setBlogs(blogs.concat(returnedBlog))
     notify(`A new blog '${blogObj.title}', by ${blogObj.author} added.`)
