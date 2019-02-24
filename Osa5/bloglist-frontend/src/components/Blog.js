@@ -1,11 +1,13 @@
 import React, { useState } from 'react'
 
-const Blog = ({ blog, like, deleteBlog }) => {
+const Blog = ({ blog, like, deleteBlog, deleteVisible }) => {
   const [visible, setVisible] = useState(false)
+  const showDelete = { display: deleteVisible ? '' : 'none' }
   const showWhenVisible = { display: visible ? '' : 'none' }
   const toggleVisible = () => {
     setVisible(!visible)
   }
+
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -30,8 +32,8 @@ const Blog = ({ blog, like, deleteBlog }) => {
         <div>
           added by {blog.user.name}
         </div>
-        <div>
-          <button onClick={deleteBlog}>remove</button>
+        <div style={showDelete}>
+          <button onClick={deleteBlog}>delete</button>
         </div>
       </div>
     </div>

@@ -67,7 +67,7 @@ const App = () => {
     try {
       window.localStorage.removeItem('loggedBlogAppUser')
       setUser(null)
-      notify('logged out successfully', 'notification')
+      notify('logged out successfully')
     } catch (e) {
 
     }
@@ -80,12 +80,11 @@ const App = () => {
       author: author,
       url: url
     }
-    const returnedBlog = await blogService.create(blogObj)
     const newUser = {
-      name: user.name,
-      username: user.name,
-      id: user.id
+      username: user.username,
+      name: user.name
     }
+    const returnedBlog = await blogService.create(blogObj)
     returnedBlog.user = newUser
     setBlogs(blogs.concat(returnedBlog))
     notify(`A new blog '${blogObj.title}', by ${blogObj.author} added.`)
@@ -99,6 +98,7 @@ const App = () => {
     const changedBlog = { ...blog, likes: blog.likes + 1 }
     try {
       const updatedBlog = await blogService.update(changedBlog)
+      updatedBlog.user = blog.user
       setBlogs(blogs.map(b => b.id !== id ? b : updatedBlog))
     } catch (e) {
       notify(`Blog '${blog.title}' on jo valitettavasti poistettu palvelimelta`, 'error')
@@ -124,6 +124,7 @@ const App = () => {
       blog={b}
       like={() => likeBlog(b.id)}
       deleteBlog={() => deleteBlog(b.id)}
+      deleteVisible={user.username === b.user.username}
     />
   )
 
