@@ -82,8 +82,21 @@ const App = () => {
     setUrl('')
   }
 
+  const likeBlog = async id => {
+    const blog = blogs.find(b => b.id === id)
+    const changedBlog = { ...blog, likes: blog.likes + 1 }
+
+    try {
+      const updatedBlog = await blogService.update(changedBlog)
+      setBlogs(blogs.map(b => b.id !== id ? b : updatedBlog))
+    } catch (e) {
+      notify(`Blog '${blog.title}' on jo valitettavasti poistettu palvelimelta`, 'error')
+      setBlogs(blogs.map(b => b.id !== id))
+    }
+  }
+
   const rows = () => blogs.map(b =>
-    <Blog key={b.id} blog={b} />
+    <Blog key={b.id} blog={b} like={() => likeBlog(b.id)} />
   )
 
   const loginForm = () => {

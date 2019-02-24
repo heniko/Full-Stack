@@ -1,4 +1,3 @@
-
 import axios from 'axios'
 const baseUrl = '/api/blogs'
 
@@ -21,4 +20,9 @@ const create = async newObj => {
   return res.data
 }
 
-export default { getAll, setToken, create }
+const update = async updatedObj => {
+  const res = await axios.put(`${baseUrl}/${updatedObj.id}`, updatedObj)
+  return res.data
+}
+
+export default { getAll, setToken, create, update }
