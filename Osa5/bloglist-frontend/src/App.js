@@ -41,8 +41,8 @@ const App = () => {
   }
 
   const setBlogs = (unsorted) => {
-    const sorted = unsorted.sort((a,b)=>{
-      return b.likes-a.likes
+    const sorted = unsorted.sort((a, b) => {
+      return b.likes - a.likes
     })
     setAsSortedBlogs(sorted)
   }
@@ -81,6 +81,12 @@ const App = () => {
       url: url
     }
     const returnedBlog = await blogService.create(blogObj)
+    const newUser = {
+      name: user.name,
+      username: user.name,
+      id: user.id
+    }
+    returnedBlog.user = newUser
     setBlogs(blogs.concat(returnedBlog))
     notify(`A new blog '${blogObj.title}', by ${blogObj.author} added.`)
     setTitle('')
@@ -91,18 +97,34 @@ const App = () => {
   const likeBlog = async id => {
     const blog = blogs.find(b => b.id === id)
     const changedBlog = { ...blog, likes: blog.likes + 1 }
-
     try {
       const updatedBlog = await blogService.update(changedBlog)
       setBlogs(blogs.map(b => b.id !== id ? b : updatedBlog))
     } catch (e) {
       notify(`Blog '${blog.title}' on jo valitettavasti poistettu palvelimelta`, 'error')
-      setBlogs(blogs.map(b => b.id !== id))
+      setBlogs(blogs.filter(b => b.id !== id))
     }
   }
 
+  const deleteBlog = async id => {
+    const blog = blogs.find(b => b.id === id)
+    if (window.confirm(`Poistetaanko '${blog.title}'`))
+      try {
+        await blogService.deleteBlog(id)
+        setBlogs(blogs.filter(b => b.id !== id))
+        notify(`Blog '${blog.title}' poistettu palvelimelta`)
+      } catch (e) {
+        notify('Blogin poistaminen ei onnistunut', 'error')
+      }
+  }
+
   const rows = () => blogs.map(b =>
-    <Blog key={b.id} blog={b} like={() => likeBlog(b.id)} />
+    <Blog
+      key={b.id}
+      blog={b}
+      like={() => likeBlog(b.id)}
+      deleteBlog={() => deleteBlog(b.id)}
+    />
   )
 
   const loginForm = () => {
