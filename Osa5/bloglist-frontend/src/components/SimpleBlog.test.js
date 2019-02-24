@@ -2,13 +2,13 @@ import React from 'react'
 import { render, fireEvent } from 'react-testing-library'
 import SimpleBlog from './SimpleBlog'
 
-test('renders blog', () => {
-  const blog = {
-    title: 'Blog title',
-    author: 'Blog author',
-    likes: 73
-  }
+const blog = {
+  title: 'Blog title',
+  author: 'Blog author',
+  likes: 73
+}
 
+test('renders blog', () => {
   const component = render(
     <SimpleBlog
       blog={blog}
@@ -22,14 +22,8 @@ test('renders blog', () => {
   expect(blogLikes).toBeDefined()
 })
 
-test('clicking button calls event handler once', async () => {
-  const blog = {
-    title: 'Blog title',
-    author: 'Blog author',
-    likes: 73
-  }
+test('clicking like button calls event handler once', async () => {
   const mockHandler = jest.fn()
-
   const { getByText } = render(
     <SimpleBlog
       blog={blog}
@@ -41,4 +35,20 @@ test('clicking button calls event handler once', async () => {
   fireEvent.click(button)
 
   expect(mockHandler.mock.calls.length).toBe(1)
+})
+
+test('clicking like button twice calls event handler twice', () =>{
+  const mockHandler = jest.fn()
+  const { getByText } = render(
+    <SimpleBlog
+      blog={blog}
+      onClick={mockHandler}
+    />
+  )
+
+  const button = getByText('like')
+  fireEvent.click(button)
+  fireEvent.click(button)
+
+  expect(mockHandler.mock.calls.length).toBe(2)
 })
