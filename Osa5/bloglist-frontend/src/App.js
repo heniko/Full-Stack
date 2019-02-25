@@ -5,16 +5,18 @@ import loginService from './services/login'
 import Notification from './components/Notification'
 import LoginForm from './components/LoginForm'
 import Togglable from './components/Togglable'
+import { useField } from './hooks'
+import BlogForm from './components/BlogForm';
 
 
 const App = () => {
   const [blogs, setAsSortedBlogs] = useState([])
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
-  const [url, setUrl] = useState('')
+  const username = useField('text')
+  const password = useField('password')
+  const title = useField('text')
+  const author = useField('text')
+  const url = useField('text')
   const [notification, setNotification] = useState({
     message: null,
     type: null
@@ -50,13 +52,16 @@ const App = () => {
   const handleLogin = async (event) => {
     event.preventDefault()
     try {
-      const user = await loginService.login({ username, password })
+      const user = await loginService.login({
+        username: username.value,
+        password: password.value
+      })
 
       window.localStorage.setItem('loggedBlogAppUser', JSON.stringify(user))
       blogService.setToken(user.token)
       setUser(user)
-      setUsername('')
-      setPassword('')
+      username.reset()
+      password.reset()
     } catch (e) {
       notify('wrong username or password', 'error')
     }
@@ -76,7 +81,7 @@ const App = () => {
   const newBlog = async (event) => {
     event.preventDefault()
     const blogObj = {
-      title: title,
+      title: title.value,
       author: author,
       url: url
     }
@@ -88,9 +93,9 @@ const App = () => {
     returnedBlog.user = newUser
     setBlogs(blogs.concat(returnedBlog))
     notify(`A new blog '${blogObj.title}', by ${blogObj.author} added.`)
-    setTitle('')
-    setAuthor('')
-    setUrl('')
+    title.reset()
+    author.reset()
+    author.reset()
   }
 
   const likeBlog = async id => {
@@ -135,48 +140,28 @@ const App = () => {
           username={username}
           password={password}
           handleSubmit={handleLogin}
-          handleUsernameChange={setUsername}
-          handlePasswordChange={setPassword}
         />
       </Togglable>
     )
   }
 
-  const newBlogForm = () => (
-    <form onSubmit={newBlog}>
-      <div>
-        title:
-        <input
-          type="text"
-          value={title}
-          name="Title"
-          onChange={({ target }) => setTitle(target.value)}
+  const newBlogForm = () => {
+    return (
+      <Togglable buttonLabel='Add blog'>
+        <BlogForm
+          handleSubmit={newBlog}
+          author={author}
+          title={title}
+          url={url}
         />
-      </div>
-      <div>
-        author:
-        <input
-          type="text"
-          value={author}
-          name="Author"
-          onChange={({ target }) => setAuthor(target.value)}
-        />
-      </div>
-      <div>
-        url:
-        <input
-          type="text"
-          value={url}
-          name="Url"
-          onChange={({ target }) => setUrl(target.value)}
-        />
-      </div>
-      <button type="submit">create</button>
-    </form>
-  )
+      </Togglable>
+    )
+  }
+
 
   return (
     <div>
+      <h2>Blogs</h2>
       <Notification notification={notification} />
       {user === null ?
         <div>
@@ -184,7 +169,6 @@ const App = () => {
         </div>
         :
         <div>
-          <h2>Blogs</h2>
           <p>{user.name} logged in</p>
           <button onClick={handleLogout}>logout</button>
           {newBlogForm()}
