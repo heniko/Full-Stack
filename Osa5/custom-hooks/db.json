@@ -1,0 +1,45 @@
+{
+  "notes": [
+    {
+      "content": "custom-hookit aivan mahtavia",
+      "id": 1
+    },
+    {
+      "content": "paras feature ikinä <3",
+      "id": 2
+    },
+    {
+      "content": "jklö",
+      "id": 3
+    },
+    {
+      "content": "jklöjklö",
+      "id": 4
+    },
+    {
+      "content": "jklöjklöjklöjklöj",
+      "id": 5
+    },
+    {
+      "content": "hkjlh",
+      "id": 6
+    }
+  ],
+  "persons": [
+    {
+      "name": "mluukkai",
+      "number": "040-5483923",
+      "id": 1
+    },
+    {
+      "name": "jlökkl",
+      "number": "jköljklö",
+      "id": 2
+    },
+    {
+      "name": "jkö",
+      "number": "jklöjklöjklö",
+      "id": 3
+    }
+  ]
+}
