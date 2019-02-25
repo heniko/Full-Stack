@@ -10,7 +10,7 @@ import BlogForm from './components/BlogForm';
 
 
 const App = () => {
-  const [blogs, setAsSortedBlogs] = useState([])
+  const [blogs, setBlogsAsSorted] = useState([])
   const [user, setUser] = useState(null)
   const username = useField('text')
   const password = useField('password')
@@ -46,7 +46,7 @@ const App = () => {
     const sorted = unsorted.sort((a, b) => {
       return b.likes - a.likes
     })
-    setAsSortedBlogs(sorted)
+    setBlogsAsSorted(sorted)
   }
 
   const handleLogin = async (event) => {
@@ -73,24 +73,23 @@ const App = () => {
       window.localStorage.removeItem('loggedBlogAppUser')
       setUser(null)
       notify('logged out successfully')
-    } catch (e) {
-
-    }
+    } catch (e) {}
   }
 
   const newBlog = async (event) => {
     event.preventDefault()
     const blogObj = {
       title: title.value,
-      author: author,
-      url: url
+      author: author.value,
+      url: url.value
     }
-    const newUser = {
+    const currentUser = {
       username: user.username,
       name: user.name
     }
+
     const returnedBlog = await blogService.create(blogObj)
-    returnedBlog.user = newUser
+    returnedBlog.user = currentUser
     setBlogs(blogs.concat(returnedBlog))
     notify(`A new blog '${blogObj.title}', by ${blogObj.author} added.`)
     title.reset()
@@ -157,7 +156,6 @@ const App = () => {
       </Togglable>
     )
   }
-
 
   return (
     <div>
